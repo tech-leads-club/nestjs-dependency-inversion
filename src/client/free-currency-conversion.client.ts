@@ -22,7 +22,7 @@ export class FreeCurrencyConversionClient {
     @Inject(ConfigService) private config: ConfigService
   ) {}
 
-  getLatestRates(baseCurrency: string): Observable<Rates> {
+  getLatestRates(baseCurrency: CurrencyCode): Observable<Rates> {
     this.logger.log({
       message: 'Fetching latest rates',
       baseCurrency
@@ -33,7 +33,7 @@ export class FreeCurrencyConversionClient {
         method: 'GET',
         url: `${FreeCurrencyConversionClient.BASE_URL}/latest`,
         params: {
-          base: baseCurrency,
+          base_currency: baseCurrency.toUpperCase(),
           apikey: this.config.get<string>('FREE_CURRENCY_CONVERSION_API_KEY')
         }
       })

@@ -6,7 +6,7 @@ type CurrencyCode = string
 
 type Rates = Record<CurrencyCode, number>
 
-export type LatestResponse = {
+export type LatestRatesResponse = {
   success: boolean
   base: CurrencyCode
   date: string
@@ -21,18 +21,18 @@ export class ExchangeHostClient {
 
   constructor(@Inject(HttpService) private http: HttpService) {}
 
-  getLatestRates(baseCurrency: string): Observable<Rates> {
+  getLatestRates(baseCurrency: CurrencyCode): Observable<Rates> {
     this.logger.log({
       message: 'Fetching latest rates',
       baseCurrency
     })
 
     return this.http
-      .request<LatestResponse>({
+      .request<LatestRatesResponse>({
         method: 'GET',
         url: `${ExchangeHostClient.BASE_URL}/latest`,
         params: {
-          base: baseCurrency
+          base: baseCurrency.toUpperCase()
         }
       })
       .pipe(

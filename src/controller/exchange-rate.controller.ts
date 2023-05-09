@@ -1,10 +1,13 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
 import { Observable, map } from 'rxjs'
-import { ExchangeRateService } from 'src/service/exchange-rate.service'
+import {
+  ExchangeRateService,
+  ExchangeRateServiceToken
+} from 'src/service/exchange-rate.service'
 
 @Controller('exchange-rate')
 export class ExchangeRateController {
-  constructor(@Inject(ExchangeRateService) private service: ExchangeRateService) {}
+  constructor(@Inject(ExchangeRateServiceToken) private service: ExchangeRateService) {}
 
   @Get('/spot-price')
   getSpotPrice(
