@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios'
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Observable, map, tap } from 'rxjs'
+import { lastValueFrom, map, tap } from 'rxjs'
 
 type CurrencyCode = string
 
@@ -22,30 +22,32 @@ export class FreeCurrencyConversionClient {
     @Inject(ConfigService) private config: ConfigService
   ) {}
 
-  getLatestRates(baseCurrency: string): Observable<Rates> {
+  getLatestRates(baseCurrency: string): Promise<Rates> {
     this.logger.log({
       message: 'Fetching latest rates',
       baseCurrency
     })
 
-    return this.http
-      .request<LatestRatesResponse>({
-        method: 'GET',
-        url: `${FreeCurrencyConversionClient.BASE_URL}/latest`,
-        params: {
-          base: baseCurrency,
-          apikey: this.config.get<string>('FREE_CURRENCY_CONVERSION_API_KEY')
-        }
-      })
-      .pipe(
-        map((response) => response.data.data),
-        tap((rates) =>
-          this.logger.log({
-            message: 'Received latest rates',
-            baseCurrency,
-            rates
-          })
+    return lastValueFrom(
+      this.http
+        .request<LatestRatesResponse>({
+          method: 'GET',
+          url: `${FreeCurrencyConversionClient.BASE_URL}/latest`,
+          params: {
+            base: baseCurrency,
+            apikey: this.config.get<string>('FREE_CURRENCY_CONVERSION_API_KEY')
+          }
+        })
+        .pipe(
+          map((response) => response.data.data),
+          tap((rates) =>
+            this.logger.log({
+              message: 'Received latest rates',
+              baseCurrency,
+              rates
+            })
+          )
         )
-      )
+    )
   }
 }
