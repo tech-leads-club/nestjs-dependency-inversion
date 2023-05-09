@@ -1,14 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Observable, map } from 'rxjs'
-import { ExchangeHostClient } from 'src/client/exchange-host.client'
+import { Observable } from 'rxjs'
+import {
+  ExchangeRateRepository,
+  ExchangeRateRepositoryToken
+} from 'src/repository/exchange-rate.repository'
 
 @Injectable()
 export class ExchangeRateService {
-  constructor(@Inject(ExchangeHostClient) private client: ExchangeHostClient) {}
+  constructor(
+    @Inject(ExchangeRateRepositoryToken) private repository: ExchangeRateRepository
+  ) {}
 
   getSpotPrice(fromCurrency: string, toCurrency: string): Observable<number> {
-    return this.client
-      .getLatestPrices(fromCurrency.toUpperCase())
-      .pipe(map((response) => response.rates[toCurrency.toUpperCase()]))
+    return this.repository.getSpotPrice(fromCurrency, toCurrency)
   }
 }
