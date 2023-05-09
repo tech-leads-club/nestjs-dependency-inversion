@@ -1,0 +1,4 @@
+# Get spot price of USD to EUR 
+
+GET http://localhost:3000/exchange-rate/spot-price?fromCurrency=USD&toCurrency=EUR
+content-type: application/json

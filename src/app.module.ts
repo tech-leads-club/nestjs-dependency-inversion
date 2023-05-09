@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { ExchangeRateController } from './controller/exchange-rate.controller'
+import { ExchangeRateService } from './service/exchange-rate.service'
+import { ExchangeHostClient } from './client/exchange-host.client'
+import { HttpModule } from '@nestjs/axios'
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService]
+  imports: [HttpModule],
+  controllers: [ExchangeRateController],
+  providers: [ExchangeRateService, ExchangeHostClient]
 })
 export class AppModule {}
