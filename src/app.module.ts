@@ -5,17 +5,23 @@ import { ExchangeHostClient } from './client/exchange-host.client'
 import { HttpModule } from '@nestjs/axios'
 import { HostExchangeRateRepository } from './repository/host-exchange-rate.repository'
 import { ExchangeRateRepositoryToken } from './repository/exchange-rate.repository'
+import { FreeCurrencyConversionExchangeRateRepository } from './repository/free-currency-conversion-exchange-rate.repository'
+import { FreeCurrencyConversionClient } from './client/free-currency-conversion.client'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [HttpModule],
+  imports: [ConfigModule.forRoot(), HttpModule],
   controllers: [ExchangeRateController],
   providers: [
     ExchangeRateService,
     ExchangeHostClient,
+    FreeCurrencyConversionClient,
     HostExchangeRateRepository,
+    FreeCurrencyConversionExchangeRateRepository,
     {
       provide: ExchangeRateRepositoryToken,
-      useExisting: HostExchangeRateRepository
+      useClass: FreeCurrencyConversionExchangeRateRepository
+      // useExisting: HostExchangeRateRepository
     }
   ]
 })

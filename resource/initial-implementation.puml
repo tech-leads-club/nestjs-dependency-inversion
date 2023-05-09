@@ -1,0 +1,10 @@
+@startuml
+
+class ExchangeRateController
+class ExchangeRateService
+class ExchangeHostClient
+
+ExchangeRateController --> ExchangeRateService: uses
+ExchangeRateService --> ExchangeHostClient: uses
+
+@enduml

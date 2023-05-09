@@ -9,7 +9,7 @@ export class HostExchangeRateRepository implements ExchangeRateRepository {
 
   getSpotPrice(fromCurrency: string, toCurrency: string): Observable<number> {
     return this.client
-      .getLatestPrices(fromCurrency.toUpperCase())
-      .pipe(map((response) => response.rates[toCurrency.toUpperCase()]))
+      .getLatestRates(fromCurrency.toUpperCase())
+      .pipe(map((rates) => rates[toCurrency.toUpperCase()]))
   }
 }

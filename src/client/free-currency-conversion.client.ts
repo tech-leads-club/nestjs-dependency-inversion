@@ -1,25 +1,26 @@
 import { HttpService } from '@nestjs/axios'
 import { Inject, Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Observable, map, tap } from 'rxjs'
 
 type CurrencyCode = string
 
 type Rates = Record<CurrencyCode, number>
 
-export type LatestResponse = {
-  success: boolean
-  base: CurrencyCode
-  date: string
-  rates: Rates
+type LatestRatesResponse = {
+  data: Rates
 }
 
 @Injectable()
-export class ExchangeHostClient {
-  private logger = new Logger(ExchangeHostClient.name)
+export class FreeCurrencyConversionClient {
+  private logger = new Logger(FreeCurrencyConversionClient.name)
 
-  static BASE_URL = 'https://api.exchangerate.host'
+  static BASE_URL = 'https://api.freecurrencyapi.com/v1'
 
-  constructor(@Inject(HttpService) private http: HttpService) {}
+  constructor(
+    @Inject(HttpService) private http: HttpService,
+    @Inject(ConfigService) private config: ConfigService
+  ) {}
 
   getLatestRates(baseCurrency: string): Observable<Rates> {
     this.logger.log({
@@ -28,15 +29,16 @@ export class ExchangeHostClient {
     })
 
     return this.http
-      .request<LatestResponse>({
+      .request<LatestRatesResponse>({
         method: 'GET',
-        url: `${ExchangeHostClient.BASE_URL}/latest`,
+        url: `${FreeCurrencyConversionClient.BASE_URL}/latest`,
         params: {
-          base: baseCurrency
+          base: baseCurrency,
+          apikey: this.config.get<string>('FREE_CURRENCY_CONVERSION_API_KEY')
         }
       })
       .pipe(
-        map((response) => response.data.rates),
+        map((response) => response.data.data),
         tap((rates) =>
           this.logger.log({
             message: 'Received latest rates',
