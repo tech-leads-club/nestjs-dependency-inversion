@@ -20,8 +20,8 @@ import { ConfigModule } from '@nestjs/config'
     FreeCurrencyConversionExchangeRateRepository,
     {
       provide: ExchangeRateRepositoryToken,
-      useClass: FreeCurrencyConversionExchangeRateRepository
-      // useExisting: HostExchangeRateRepository
+      useExisting: HostExchangeRateRepository
+      // useExisting: FreeCurrencyConversionExchangeRateRepository
     }
   ]
 })

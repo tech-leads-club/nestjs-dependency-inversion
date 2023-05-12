@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios'
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import { Observable, map, tap } from 'rxjs'
+import { lastValueFrom, map, tap } from 'rxjs'
 
 type CurrencyCode = string
 
@@ -21,29 +21,31 @@ export class ExchangeHostClient {
 
   constructor(@Inject(HttpService) private http: HttpService) {}
 
-  getLatestRates(baseCurrency: string): Observable<Rates> {
+  getLatestRates(baseCurrency: string): Promise<Rates> {
     this.logger.log({
       message: 'Fetching latest rates',
       baseCurrency
     })
 
-    return this.http
-      .request<LatestResponse>({
-        method: 'GET',
-        url: `${ExchangeHostClient.BASE_URL}/latest`,
-        params: {
-          base: baseCurrency
-        }
-      })
-      .pipe(
-        map((response) => response.data.rates),
-        tap((rates) =>
-          this.logger.log({
-            message: 'Received latest rates',
-            baseCurrency,
-            rates
-          })
+    return lastValueFrom(
+      this.http
+        .request<LatestResponse>({
+          method: 'GET',
+          url: `${ExchangeHostClient.BASE_URL}/latest`,
+          params: {
+            base: baseCurrency
+          }
+        })
+        .pipe(
+          map((response) => response.data.rates),
+          tap((rates) =>
+            this.logger.log({
+              message: 'Received latest rates',
+              baseCurrency,
+              rates
+            })
+          )
         )
-      )
+    )
   }
 }

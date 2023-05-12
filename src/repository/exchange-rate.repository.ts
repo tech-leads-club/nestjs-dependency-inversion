@@ -1,7 +1,5 @@
-import { Observable } from 'rxjs'
-
 export interface ExchangeRateRepository {
-  getSpotPrice(fromCurrency: string, toCurrency: string): Observable<number>
+  getSpotPrice(fromCurrency: string, toCurrency: string): Promise<number>
 }
 
 export const ExchangeRateRepositoryToken = Symbol('ExchangeRateRepository')
