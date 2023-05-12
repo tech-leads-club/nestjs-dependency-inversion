@@ -33,7 +33,7 @@ export class ExchangeHostClient {
           method: 'GET',
           url: `${ExchangeHostClient.BASE_URL}/latest`,
           params: {
-            base: baseCurrency
+            base: baseCurrency.toUpperCase()
           }
         })
         .pipe(

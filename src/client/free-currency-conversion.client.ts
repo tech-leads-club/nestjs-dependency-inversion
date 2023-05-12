@@ -34,7 +34,7 @@ export class FreeCurrencyConversionClient {
           method: 'GET',
           url: `${FreeCurrencyConversionClient.BASE_URL}/latest`,
           params: {
-            base: baseCurrency,
+            base_currency: baseCurrency.toUpperCase(),
             apikey: this.config.get<string>('FREE_CURRENCY_CONVERSION_API_KEY')
           }
         })

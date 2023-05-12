@@ -8,6 +8,7 @@ import { ExchangeRateRepositoryToken } from './repository/exchange-rate.reposito
 import { FreeCurrencyConversionExchangeRateRepository } from './repository/free-currency-conversion-exchange-rate.repository'
 import { FreeCurrencyConversionClient } from './client/free-currency-conversion.client'
 import { ConfigModule } from '@nestjs/config'
+import { RedundantExchangeRateRepository } from './repository/redundant-exchange-rate.repository'
 
 @Module({
   imports: [ConfigModule.forRoot(), HttpModule],
@@ -18,9 +19,11 @@ import { ConfigModule } from '@nestjs/config'
     FreeCurrencyConversionClient,
     HostExchangeRateRepository,
     FreeCurrencyConversionExchangeRateRepository,
+    RedundantExchangeRateRepository,
     {
       provide: ExchangeRateRepositoryToken,
-      useExisting: HostExchangeRateRepository
+      useExisting: RedundantExchangeRateRepository
+      // useExisting: HostExchangeRateRepository
       // useExisting: FreeCurrencyConversionExchangeRateRepository
     }
   ]

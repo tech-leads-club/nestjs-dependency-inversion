@@ -1,4 +1,10 @@
-# Get spot price of USD to EUR 
+# Get spot price of USD to EUR.
 
 GET http://localhost:3000/exchange-rate/spot-price?fromCurrency=USD&toCurrency=EUR
+content-type: application/json
+
+
+# Fallback from one client to another after failing to get CLP prices.
+
+GET http://localhost:3000/exchange-rate/spot-price?fromCurrency=CLP&toCurrency=USD
 content-type: application/json
