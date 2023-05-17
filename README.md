@@ -24,3 +24,10 @@ no arquivo `.env`.
 ```bash
 yarn run start:dev
 ```
+
+Você pode testar a API no seguinte endpoint:
+
+- `GET http://localhost:3000/exchange-rate/spot-price?fromCurrency=USD&toCurrency=EUR`
+  - Responde com o último preço de USD em EUR.
+- `GET http://localhost:3000/exchange-rate/spot-price?fromCurrency=CLP&toCurrency=USD`
+  - Exemplo da redundância em ação.
