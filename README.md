@@ -2,6 +2,15 @@
 
 ![Diagrama de inversão de dependência](resource/exchange-rate-repository.png)
 
+## Faça parte já da Tech Leads club
+
+Para uma exploração completa e detalhada do Princípio de Inversão de Dependência
+dess repositório, incluindo um passo a passo, a análise dos benefícios e os
+possíveis trade-offs, confira nosso artigo completo. Ele está disponível na
+comunidade Tech Leads Club, que você pode acessar pelo link abaixo 👇
+
+https://www.techleads.club/c/desenvolvimento-e-arquitetura-de-software/inversao-de-dependencia-protega-se-de-mudancas-externas
+
 ## Instalando
 
 ```bash
