@@ -1,19 +1,20 @@
 @startuml
 
 interface ExchangeRateRepository {
-  getSpotPrice(fromCurrency: string, toCurrency: string): Observable<number>
+  getSpotPrice(fromCurrency: string, toCurrency: string): Promise<number>
 }
 
 ExchangeRateController --> ExchangeRateService: uses
 ExchangeRateService --> ExchangeRateRepository: uses
 
-HostExchangeRateRepository -|> ExchangeRateRepository: implements
+
+ExchangeRateRepository <|-- HostExchangeRateRepository: implements
 HostExchangeRateRepository --> HostExchangeClient: uses
 
-FreeCurrencyConversionExchangeRateRepository --|> ExchangeRateRepository: implements
+ExchangeRateRepository <|-- FreeCurrencyConversionExchangeRateRepository: implements
 FreeCurrencyConversionExchangeRateRepository --> FreeCurrencyConversionClient: uses
 
-RedundantExchangeRateRepository ---|> ExchangeRateRepository: implements
+ExchangeRateRepository <|-- RedundantExchangeRateRepository: implements
 RedundantExchangeRateRepository ---> HostExchangeRateRepository: uses
 RedundantExchangeRateRepository ---> FreeCurrencyConversionExchangeRateRepository: uses
 
