@@ -23,8 +23,6 @@ import { RedundantExchangeRateRepository } from './repository/redundant-exchange
     {
       provide: ExchangeRateRepositoryToken,
       useExisting: RedundantExchangeRateRepository
-      // useExisting: HostExchangeRateRepository
-      // useExisting: FreeCurrencyConversionExchangeRateRepository
     }
   ]
 })

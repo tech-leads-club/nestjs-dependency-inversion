@@ -40,7 +40,8 @@ export class RedundantExchangeRateRepository implements ExchangeRateRepository {
       this.logger.log({
         message: 'Failed to get spot price. Falling back to another exchange rate',
         fromCurrency,
-        toCurrency
+        toCurrency,
+        error
       })
 
       return this.hostExchangeRateRepository.getSpotPrice(fromCurrency, toCurrency)
