@@ -1,17 +1,24 @@
 import { HttpService } from '@nestjs/axios'
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { lastValueFrom, map, tap } from 'rxjs'
+import { z } from 'zod'
 
-type CurrencyCode = string
+const CurrencyCode = z.string().min(3).max(3).toUpperCase()
 
-type Rates = Record<CurrencyCode, number>
+const RateAmount = z.number().min(0)
 
-export type LatestResponse = {
-  success: boolean
-  base: CurrencyCode
-  date: string
+const Rates = z.record(CurrencyCode, RateAmount)
+
+const LatestResponse = z.object({
+  success: z.boolean(),
+  base: CurrencyCode,
+  date: z.string(),
   rates: Rates
-}
+})
+
+type Rates = z.infer<typeof Rates>
+
+export type LatestResponse = z.infer<typeof LatestResponse>
 
 @Injectable()
 export class ExchangeHostClient {
@@ -29,7 +36,7 @@ export class ExchangeHostClient {
 
     return lastValueFrom(
       this.http
-        .request<LatestResponse>({
+        .request<unknown>({
           method: 'GET',
           url: `${ExchangeHostClient.BASE_URL}/latest`,
           params: {
@@ -37,7 +44,8 @@ export class ExchangeHostClient {
           }
         })
         .pipe(
-          map((response) => response.data.rates),
+          map((response) => LatestResponse.parse(response.data)),
+          map((data) => data.rates),
           tap((rates) =>
             this.logger.log({
               message: 'Received latest rates',
